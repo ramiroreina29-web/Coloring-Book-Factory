@@ -1,6 +1,7 @@
+
 import React from 'react';
-import { BookConfig, AspectRatio } from '../types';
-import { Sparkles, Layers, Pause, Play, Trash2, Settings2, Frame, Baby, ScanFace, Brush } from 'lucide-react';
+import { BookConfig } from '../types';
+import { Sparkles, Layers, Pause, Play, Trash2, Settings2, Frame, Baby, ScanFace, Brush, Flower, Ghost, Crown, Smile, Grid } from 'lucide-react';
 
 interface ConfigFormProps {
   config: BookConfig;
@@ -148,9 +149,40 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({
           </div>
         </div>
 
+        {/* Art Style Selector */}
+        <div>
+            <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Art Style</label>
+            <div className="grid grid-cols-3 gap-2">
+                <button onClick={() => handleChange('artStyle', 'kawaii')} className={`flex flex-col items-center justify-center p-2 rounded-xl border-2 transition h-20 ${config.artStyle === 'kawaii' ? 'border-brand-400 bg-brand-50 text-brand-700' : 'border-gray-200 hover:border-brand-200 text-gray-500'}`} disabled={isGenerating}>
+                    <Sparkles size={20} className="mb-1" />
+                    <span className="text-[10px] font-bold">Kawaii</span>
+                </button>
+                <button onClick={() => handleChange('artStyle', 'mandala')} className={`flex flex-col items-center justify-center p-2 rounded-xl border-2 transition h-20 ${config.artStyle === 'mandala' ? 'border-brand-400 bg-brand-50 text-brand-700' : 'border-gray-200 hover:border-brand-200 text-gray-500'}`} disabled={isGenerating}>
+                    <Flower size={20} className="mb-1" />
+                    <span className="text-[10px] font-bold">Mandala</span>
+                </button>
+                <button onClick={() => handleChange('artStyle', 'spooky')} className={`flex flex-col items-center justify-center p-2 rounded-xl border-2 transition h-20 ${config.artStyle === 'spooky' ? 'border-brand-400 bg-brand-50 text-brand-700' : 'border-gray-200 hover:border-brand-200 text-gray-500'}`} disabled={isGenerating}>
+                    <Ghost size={20} className="mb-1" />
+                    <span className="text-[10px] font-bold">Spooky</span>
+                </button>
+                <button onClick={() => handleChange('artStyle', 'fantasy')} className={`flex flex-col items-center justify-center p-2 rounded-xl border-2 transition h-20 ${config.artStyle === 'fantasy' ? 'border-brand-400 bg-brand-50 text-brand-700' : 'border-gray-200 hover:border-brand-200 text-gray-500'}`} disabled={isGenerating}>
+                    <Crown size={20} className="mb-1" />
+                    <span className="text-[10px] font-bold">Fantasy</span>
+                </button>
+                <button onClick={() => handleChange('artStyle', 'cartoon')} className={`flex flex-col items-center justify-center p-2 rounded-xl border-2 transition h-20 ${config.artStyle === 'cartoon' ? 'border-brand-400 bg-brand-50 text-brand-700' : 'border-gray-200 hover:border-brand-200 text-gray-500'}`} disabled={isGenerating}>
+                    <Smile size={20} className="mb-1" />
+                    <span className="text-[10px] font-bold">Cartoon</span>
+                </button>
+                <button onClick={() => handleChange('artStyle', 'pixel')} className={`flex flex-col items-center justify-center p-2 rounded-xl border-2 transition h-20 ${config.artStyle === 'pixel' ? 'border-brand-400 bg-brand-50 text-brand-700' : 'border-gray-200 hover:border-brand-200 text-gray-500'}`} disabled={isGenerating}>
+                    <Grid size={20} className="mb-1" />
+                    <span className="text-[10px] font-bold">Pixel</span>
+                </button>
+            </div>
+        </div>
+
         {/* Style Mode Selector - Mutually Exclusive */}
         <div>
-            <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Drawing Style</label>
+            <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Drawing Complexity</label>
             <div className="grid grid-cols-3 gap-2">
                 {/* Standard Mode */}
                 <button 

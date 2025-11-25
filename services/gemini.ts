@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import { BookConfig, PageType } from '../types';
 
@@ -26,23 +27,28 @@ export const generatePagePrompt = async (
   const isBack = pageNumber === total + 1;
 
   let systemPrompt = `You are an expert creative director for coloring books. 
-  Topic: "${config.topic}". Style: ${config.style}.`;
+  Topic: "${config.topic}". Style: ${config.artStyle}.`;
 
   let userPrompt = "";
 
   if (isCover) {
     userPrompt = `Describe a visually striking, best-selling coloring book cover art for "${config.title}".
+    Theme: ${config.artStyle}.
     Must be fully colored, cute, and eye-catching. Output visual description only.`;
   } else if (isBack) {
     userPrompt = `Describe a visual pattern or theme for a professional coloring book back cover about "${config.topic}". Output visual description only.`;
   } else {
-    // Logic for Interior Pages based on StyleMode
+    // Logic for Interior Pages based on StyleMode and ArtStyle
+    const styleKeyword = config.artStyle.toUpperCase();
+    
     if (config.styleMode === 'classic') {
-        userPrompt = `Describe a SINGLE character (e.g., one animal) for page ${pageNumber}. 
+        userPrompt = `Describe a SINGLE character (e.g., one animal/object) for page ${pageNumber}. 
+        Style: ${styleKeyword}.
         NO background. NO scenery. Just the character doing a simple pose.
         Keep it extremely simple. Max 15 words.`;
     } else {
         userPrompt = `Describe a SINGLE, unique coloring page scene for page ${pageNumber}.
+        Style: ${styleKeyword}.
         Focus on ONE main subject in the center. 
         Limit background elements to ensure clarity.
         Max 20 words. Visual description only.`;
@@ -85,9 +91,35 @@ export const generateImage = async (
   const constructPrompt = (safeMode: boolean = false) => {
     let fullPrompt = "";
     
+    // Define Art Style Specific Rules
+    let styleRules = "";
+    switch(config.artStyle) {
+        case 'kawaii':
+            styleRules = "AESTHETIC: KAWAII, CUTE, ROUNDED SHAPES, SWEET EXPRESSIONS, ADORABLE.";
+            break;
+        case 'mandala':
+            styleRules = "AESTHETIC: MANDALA, ZENTANGLE, RADIAL SYMMETRY, GEOMETRIC PATTERNS, FLORAL MOTIFS, RELAXING.";
+            break;
+        case 'spooky':
+            styleRules = "AESTHETIC: HALLOWEEN, SPOOKY, CUTE GHOSTS, PUMPKINS, BATS, WITCHY, FUN SCARY.";
+            break;
+        case 'fantasy':
+            styleRules = "AESTHETIC: FANTASY, PRINCESS, CASTLES, MAGICAL, FAIRY TALE, ELEGANT.";
+            break;
+        case 'cartoon':
+            styleRules = "AESTHETIC: CARTOON, DYNAMIC POSES, COMIC STYLE, EXAGGERATED FEATURES, FUNNY.";
+            break;
+        case 'pixel':
+            styleRules = "AESTHETIC: PIXEL ART STYLE, BLOCKY, RETRO GAME, SQUARE EDGES, 8-BIT VIBE (BUT BLACK LINE ART).";
+            break;
+        default:
+            styleRules = "AESTHETIC: KAWAII, CUTE.";
+    }
+
     if (type === PageType.COVER) {
         fullPrompt = `High-quality coloring book cover art. 
         Title area: "${config.title}". Scene: ${prompt}.
+        ${styleRules}
         Style: Vibrant colors, 8k resolution, vector art, commercial bestseller aesthetic.`;
     } else if (type === PageType.BACK_COVER) {
         // PROFESSIONAL COMMERCIAL BACK COVER
@@ -100,6 +132,7 @@ export const generateImage = async (
         - Placeholder visual blocks representing summary text.
         STYLE:
         - Minimalist, coherent with the cover.
+        - ${styleRules}
         - Subtle background pattern related to: ${prompt}.
         - High resolution, 8k, vector style print ready.
         - NO text characters, just layout blocks.`;
@@ -110,11 +143,11 @@ export const generateImage = async (
         const safePrompt = safeMode ? "cute simple shape outline" : prompt;
         const babyText = safeMode ? "SIMPLE THICK OUTLINES" : "BABY/TODDLER LEVEL";
 
-        fullPrompt = `coloring book page, ${safePrompt}. `;
+        fullPrompt = `coloring book page, ${safePrompt}. ${styleRules}. `;
 
         if (config.styleMode === 'baby') {
             fullPrompt += `
-            STYLE: ${babyText}.
+            COMPLEXITY: ${babyText}.
             - EXTRA THICK BOLD LINES.
             - VERY SIMPLE SHAPES.
             - MINIMAL DETAILS.
@@ -122,7 +155,7 @@ export const generateImage = async (
             `;
         } else {
             fullPrompt += `
-            STYLE: STANDARD KDP PROFESSIONAL.
+            COMPLEXITY: STANDARD KDP PROFESSIONAL.
             - Clean, medium-weight continuous black lines.
             - Balanced detail.
             `;

@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useRef } from 'react';
 import { BookConfig, BookState, GeneratedPage, PageType } from './types';
 import { ConfigForm } from './components/ConfigForm';
@@ -11,9 +12,9 @@ const DEFAULT_CONFIG: BookConfig = {
   title: "Cozy Cottage Cuties",
   topic: "Cute animals in cozy cottages drinking tea",
   pageCount: 5,
-  style: "Kawaii Cottagecore",
+  artStyle: 'kawaii',
   aspectRatio: '3:4',
-  styleMode: 'standard', // Default mode
+  styleMode: 'standard',
   hasFrames: true
 };
 

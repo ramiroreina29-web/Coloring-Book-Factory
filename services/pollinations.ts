@@ -19,7 +19,7 @@ export const generatePagePrompt = async (
   let userPrompt = "";
 
   if (isCover) {
-    userPrompt = `Describe a cute, catchy, bestseller coloring book cover for a book titled "${config.title}" about "${config.topic}". Style: ${config.style}. description only, no introduction.`;
+    userPrompt = `Describe a cute, catchy, bestseller coloring book cover for a book titled "${config.title}" about "${config.topic}". Style: ${config.artStyle}. description only, no introduction.`;
   } else if (isBack) {
     userPrompt = `Describe a minimal, clean back cover for a coloring book about "${config.topic}". description only.`;
   } else {

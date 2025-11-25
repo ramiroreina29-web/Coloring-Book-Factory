@@ -1,3 +1,4 @@
+
 export enum PageType {
   COVER = 'COVER',
   INTERIOR = 'INTERIOR',
@@ -6,15 +7,16 @@ export enum PageType {
 
 export type AspectRatio = '1:1' | '3:4';
 export type StyleMode = 'standard' | 'baby' | 'classic';
+export type ArtStyle = 'kawaii' | 'mandala' | 'cartoon' | 'spooky' | 'fantasy' | 'pixel';
 
 export interface BookConfig {
   title: string;
   topic: string;
   pageCount: number;
-  style: string;
+  artStyle: ArtStyle;
   aspectRatio: AspectRatio;
-  styleMode: StyleMode; // Replaces complexity and isClassicMode for mutual exclusivity
-  hasFrames: boolean; // Add frames/borders?
+  styleMode: StyleMode;
+  hasFrames: boolean;
 }
 
 export interface GeneratedPage {
